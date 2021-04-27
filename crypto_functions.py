@@ -81,3 +81,36 @@ def vigenere_cipher(input_text, input_keyword):
     vigenere_cipher = [chr(i) for i in cipher_asc_ii]
 
     return ''.join(vigenere_cipher)
+
+
+def vigenere_decipher(encrypted_text, input_keyword):
+    alphabet_rotation_letter = {'A': 0, 'a': 0, 'B': 1, 'b': 1, 'C': 2, 'c': 2, 'D': 3,
+                                'd': 3, 'E': 4, 'e': 4, 'F': 5, 'f': 5, 'G': 6, 'g': 6, 'H': 7, 'h': 7,
+                                'I': 8, 'i': 8, 'J': 9, 'j': 9, 'K': 10, 'k': 10, 'L': 11, 'l': 11, 'M': 12,
+                                'm': 12, 'N': 13, 'n': 13, 'O': 14, 'o': 14, 'P': 15, 'p': 15, 'Q': 16,
+                                'q': 16, 'R': 17, 'r': 17, 'S': 18, 's': 18, 'T': 19, 't': 19, 'U': 20, 'u': 20,
+                                'V': 21, 'v': 21, 'W': 22, 'w': 22, 'X': 23, 'x': 23, 'Y': 24, 'y': 24,
+                                'Z': 25, 'z': 25
+                                }
+
+    # matching keyword lenght with encrypted text lenght
+    extended_key = input_keyword * (len(encrypted_text) // len(input_keyword) + 1)
+    extended_key_target = extended_key[:len(encrypted_text)]
+
+    # transform the key string in a list
+    extended_key_list = [char for char in extended_key_target]
+
+    # save all rotations based on key position in original alphabet
+    rotation_key = []
+    for i in range(len(extended_key_list)):
+        rotation_key.append(*[alphabet_rotation_letter[extended_key_list[i]]])
+
+    transform_asc_ii = [ord(char) for char in encrypted_text]
+
+    cipher_asc_ii = []
+    for i in range(len(extended_key_list)):
+        cipher_asc_ii.append(transform_asc_ii[i] - rotation_key[i])
+
+    vigenere_cipher = [chr(i) for i in cipher_asc_ii]
+
+    return ''.join(vigenere_cipher)
