@@ -114,3 +114,44 @@ def vigenere_decipher(encrypted_text, input_keyword):
     vigenere_cipher = [chr(i) for i in cipher_asc_ii]
 
     return ''.join(vigenere_cipher)
+
+
+def asymmetric_encrypt(original_text, n, e):
+
+    letter_to_ascii = [ord(letter) for letter in original_text]
+    cipher_ascii = [pow(ascii_number, e, n) for ascii_number in letter_to_ascii]
+
+    return cipher_ascii
+
+#encrypt is asymmetric_encryp's return
+def asymmetric_decrypt(encrypt):
+
+    decipher_asymmetric = [pow(ciphered_number, d, n) for ciphered_number in encrypt]
+    original_message = [chr(i) for i in decipher_asymmetric]
+
+    return ''.join(original_message)
+
+def keys_generator():
+    import random
+    import math
+
+    p = random.getrandbits(10)
+    q = random.getrandbits(10)
+
+    while miller_rabin(p, 40) == False and miller_rabin(q, 40) == False:
+        p = random.getrandbits(10)
+        q = random.getrandbits(10)
+
+    n = p * q
+
+    phi_n = (p - 1) * (q - 1)
+
+    # getting the first number that the greatest common divisor is iqual to 1
+    e = random.getrandbits(phi_n)
+    
+    while math.gcd(e, phi_n) != 1:
+        e = random.getrandbits(phi_n)
+
+    d = pow(e, -1, phi_n)
+    
+    return n, d, e
