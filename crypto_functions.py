@@ -124,7 +124,7 @@ def asymmetric_encrypt(original_text, n, e):
     return cipher_ascii
 
 #encrypt is asymmetric_encryp's return
-def asymmetric_decrypt(encrypt):
+def asymmetric_decrypt(encrypt, n, d):
 
     decipher_asymmetric = [pow(ciphered_number, d, n) for ciphered_number in encrypt]
     original_message = [chr(i) for i in decipher_asymmetric]
