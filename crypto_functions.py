@@ -131,27 +131,37 @@ def asymmetric_decrypt(encrypt, n, d):
 
     return ''.join(original_message)
 
-def keys_generator():
+
+def large_prime_generator():
     import random
+
+    p = random.getrandbits(512)
+
+    while not miller_rabin(p, 40):
+        p = random.getrandbits(512)
+
+    return p
+
+
+def generate_keys():
     import math
 
-    p = random.getrandbits(10)
-    q = random.getrandbits(10)
-
-    while miller_rabin(p, 40) == False and miller_rabin(q, 40) == False:
-        p = random.getrandbits(10)
-        q = random.getrandbits(10)
+    p = large_prime_generator()
+    q = large_prime_generator()
 
     n = p * q
-
     phi_n = (p - 1) * (q - 1)
 
-    # getting the first number that the greatest common divisor is iqual to 1
-    e = random.getrandbits(phi_n)
-    
-    while math.gcd(e, phi_n) != 1:
-        e = random.getrandbits(phi_n)
+    e = 1
+    f = 0
+    while f!=1 or e <= 1 or e >= phi_n:
+        e += 2
+        f = math.gcd(e, phi_n)
 
-    d = pow(e, -1, phi_n)
-    
-    return n, d, e
+    k = 1
+    while ((k * phi_n + 1)%e) != 0:
+        k += 1
+
+    d = int((k * phi_n+1)/e)
+
+    return n, e, d
